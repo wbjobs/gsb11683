@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1000 图片列表 · 加载/解码方案性能对比</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header id="topbar">
+  <h1>1000 张图片 · 解码方案对比</h1>
+  <div class="controls">
+    <span class="label">加载方案：</span>
+    <button class="strategy-btn active" data-strategy="img">&lt;img&gt; 标签</button>
+    <button class="strategy-btn" data-strategy="bitmap">createImageBitmap (Worker)</button>
+    <button class="strategy-btn" data-strategy="decode">img.decode()</button>
+    <label class="toggle">
+      <input type="checkbox" id="preloadToggle" checked> 空闲预加载
+    </label>
+    <button id="resetStats">重置统计</button>
+    <button id="clearCache">清空 IndexedDB 缓存</button>
+  </div>
+</header>
+
+<aside id="metrics">
+  <h2>实时指标</h2>
+  <dl>
+    <dt>当前方案</dt><dd id="mStrategy">-</dd>
+    <dt>FPS</dt><dd id="mFps">-</dd>
+    <dt>掉帧 (&gt;50ms)</dt><dd id="mJank">0</dd>
+    <dt>长任务 (&gt;50ms)</dt><dd id="mLongtask">0</dd>
+    <dt>JS Heap</dt><dd id="mHeap">N/A</dd>
+    <dt>解码内存(估算)</dt><dd id="mImgMem">0 MB</dd>
+    <dt>已加载行</dt><dd id="mLoaded">0</dd>
+    <dt>预加载缓存</dt><dd id="mCache">0</dd>
+    <dt>解码失败(已降级)</dt><dd id="mErrors">0</dd>
+  </dl>
+  <h2>方案对比（累计）</h2>
+  <table id="compareTable">
+    <thead>
+      <tr><th>方案</th><th>样本</th><th>加载 avg</th><th>解码 avg</th><th>解码 p95</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <p class="hint">提示：&lt;img&gt; 方案的解码发生在主线程渲染阶段，无法直接计时，请观察「长任务 / FPS」列的差异。</p>
+</aside>
+
+<main id="listWrap">
+  <div id="list"></div>
+</main>
+
+<script src="js/metrics.js"></script>
+<script src="js/strategies.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
