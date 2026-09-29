@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1000 图片加载方案性能对比</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>图片加载方案对比 <span class="badge">1000 张</span></h1>
+    <div class="strategies" id="strategies">
+      <button data-strategy="img" class="active">① img 标签</button>
+      <button data-strategy="decode">② img.decode()</button>
+      <button data-strategy="bitmap">③ createImageBitmap (Worker)</button>
+    </div>
+    <div class="actions">
+      <button id="btn-pressure" title="收缩解码缓存，模拟内存压力下的行为">模拟内存压力</button>
+      <button id="btn-clear-cache" title="清空 IndexedDB 图片缓存">清空缓存</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="panel" id="panel">
+      <h2>性能指标</h2>
+      <p class="strategy-desc" id="strategy-desc"></p>
+      <dl class="metrics">
+        <div><dt>FPS（当前 / 1% 低）</dt><dd id="m-fps">–</dd></div>
+        <div><dt>长任务（&gt;50ms）</dt><dd id="m-longtask">–</dd></div>
+        <div><dt>加载耗时 avg / p95</dt><dd id="m-fetch">–</dd></div>
+        <div><dt>解码耗时 avg / p95</dt><dd id="m-decode">–</dd></div>
+        <div><dt>端到端 avg / p95</dt><dd id="m-total">–</dd></div>
+        <div><dt>JS 堆内存</dt><dd id="m-memory">–</dd></div>
+        <div><dt>解码缓存</dt><dd id="m-cache">–</dd></div>
+        <div><dt>已加载 / 失败</dt><dd id="m-count">–</dd></div>
+        <div><dt>预加载队列</dt><dd id="m-preload">–</dd></div>
+      </dl>
+      <p class="hint" id="memory-warning" hidden>⚠ 内存压力：解码缓存已自动收缩</p>
+      <p class="hint">提示：列表中 #13 / #377 / #888 为损坏图片，用于验证解码失败降级。</p>
+    </aside>
+    <main class="viewport" id="viewport" tabindex="0"></main>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
